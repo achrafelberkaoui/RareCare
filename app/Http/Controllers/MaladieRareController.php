@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 
 use App\Models\MaladieRare;
+use Exception;
 use Illuminate\Http\Request;
+use OpenAI\Laravel\Facades\OpenAI;
 
 class MaladieRareController extends Controller
 {
@@ -72,5 +74,29 @@ class MaladieRareController extends Controller
     return response()->json([
         "message" => "deleted"
     ]);
+    }
+
+    public function generateDescription(Request $request)
+    {
+        try{
+        $response = OpenAI::chat()->create([
+        'model' => 'gpt-4o-mini',
+            'messages' => [
+                    [
+                    'role' => 'user',
+                    'content' => 'Generate a short medical description for this rare maladie: '.$request->name
+                    ]
+            ],
+        ]);
+        
+        return response()->json([
+        'description' => $response->choices[0]->message->content
+        ]);
+        }catch(Exception $e){
+            return response()->json([
+                'error'=>'AI not found',
+                'message'=> $e->getMessage()
+            ]);
+        }
     }
 }
