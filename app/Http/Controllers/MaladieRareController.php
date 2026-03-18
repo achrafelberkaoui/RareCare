@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Resources\RareResource;
 use App\Models\MaladieRare;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use OpenAI\Laravel\Facades\OpenAI;
 
 class MaladieRareController extends Controller
 {
@@ -15,7 +14,7 @@ class MaladieRareController extends Controller
     public function index()
     {
     $maladieRares = MaladieRare::paginate(10);
-    return response()->json($maladieRares,200);
+    return RareResource::collection($maladieRares);
     }
 
     public function create()
@@ -23,9 +22,6 @@ class MaladieRareController extends Controller
        
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
