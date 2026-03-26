@@ -15,3 +15,6 @@ Route::post('logout',[AuthController::class,'logout']);
 Route::middleware('auth:api')->group(function(){
     Route::get('profile', [AuthController::class, 'profile']);
 });
+Route::middleware(['auth:api','role:admin'])->group(function(){
+    Route::delete('rare/{id}', [MaladieRareController::class, 'destroy']);
+});

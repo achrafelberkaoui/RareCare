@@ -20,7 +20,7 @@ public function register(Request $request)
         'email' => $request->email,
         'password' => bcrypt($request->password),
     ]);
-
+        $user->assignRole('docotr');
     return response()->json(['message' => 'Utilisateur cree', 'user' => $user], 201);
 }
 
@@ -56,6 +56,9 @@ public function logout()
 
 public function profile()
 {
-    return response()->json(auth()->user());
+    // return response()->json(auth()->user());
+    return response()->json([
+    'roles' => auth()->user()->getRoleNames()
+]);
 }
 }
